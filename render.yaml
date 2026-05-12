@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mapfix-spatial
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_TEXT_MODEL
+        value: gpt-5.5
+      - key: OPENAI_IMAGE_MODEL
+        value: gpt-image-1
+      - key: OPENAI_IMAGE_SIZE
+        value: 1536x1024
+      - key: OPENAI_IMAGE_QUALITY
+        value: medium

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Distortion-Aware MapFix: an interactive spatial coordinate correction demo."
+    />
+    <title>Distortion-Aware MapFix</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace" aria-label="MapFix coordinate correction workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">MapFix Spatial</p>
+            <h1>Distortion-Aware MapFix</h1>
+          </div>
+          <div class="status-cluster" aria-label="Current run status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="runStatus">Ready</span>
+          </div>
+        </header>
+
+        <section class="stage-grid">
+          <aside class="control-rail" aria-label="Controls">
+            <div class="field">
+              <label for="sampleSelect">Dataset</label>
+              <select id="sampleSelect">
+                <option value="bay">Bay shoreline</option>
+                <option value="transit">Transit alignment</option>
+                <option value="sensors">Sensor grid</option>
+                <option value="quake">Quake cluster</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="projectionSelect">Projection</label>
+              <select id="projectionSelect">
+                <option value="mercator">Mercator repair</option>
+                <option value="equalEarth">Equal Earth</option>
+                <option value="albers">Albers local</option>
+                <option value="tangent">Local tangent</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <div class="label-row">
+                <label for="strengthRange">Correction</label>
+                <output id="strengthValue" for="strengthRange">72%</output>
+              </div>
+              <input id="strengthRange" type="range" min="0" max="100" value="72" />
+            </div>
+
+            <div class="field">
+              <div class="label-row">
+                <label for="noiseRange">Raw drift</label>
+                <output id="noiseValue" for="noiseRange">18%</output>
+              </div>
+              <input id="noiseRange" type="range" min="0" max="42" value="18" />
+            </div>
+
+            <div class="button-row">
+              <button id="runButton" type="button">Run MapFix</button>
+              <button id="shuffleButton" class="secondary" type="button">New drift</button>
+            </div>
+            <button id="aiRenderButton" class="secondary full-button" type="button">
+              Generate AI map
+            </button>
+            <button id="exportButton" class="ghost" type="button">Export PNG</button>
+
+            <div class="api-panel" aria-label="OpenAI backend status">
+              <span id="backendStatus">Checking backend</span>
+              <small id="backendModels">Local correction engine ready</small>
+            </div>
+          </aside>
+
+          <section class="map-stage" aria-label="Map correction canvas">
+            <canvas id="mapCanvas" width="1280" height="820"></canvas>
+            <figure id="aiRenderPreview" class="ai-render" hidden>
+              <img id="aiMapImage" alt="AI generated distortion-free map projection" />
+            </figure>
+            <div class="legend" aria-label="Map legend">
+              <span><i class="raw"></i>Raw</span>
+              <span><i class="fixed"></i>Corrected</span>
+              <span><i class="field"></i>Gradient</span>
+            </div>
+          </section>
+
+          <aside class="metric-rail" aria-label="Metrics">
+            <article class="metric">
+              <span>Mean residual</span>
+              <strong id="meanError">0.00 px</strong>
+            </article>
+            <article class="metric">
+              <span>Angular skew</span>
+              <strong id="skewMetric">0.0 deg</strong>
+            </article>
+            <article class="metric">
+              <span>Area recovery</span>
+              <strong id="areaMetric">0%</strong>
+            </article>
+            <article class="metric">
+              <span>Confidence</span>
+              <strong id="confidenceMetric">0.00</strong>
+            </article>
+
+            <div class="trace-panel" aria-label="Pipeline trace">
+              <h2>Pipeline</h2>
+              <ol id="pipelineTrace">
+                <li>Parse coordinates</li>
+                <li>Estimate distortion gradient</li>
+                <li>Render corrected projection</li>
+              </ol>
+              <p id="aiSummary" class="ai-summary">Local deterministic correction is ready.</p>
+            </div>
+          </aside>
+        </section>
+
+        <section class="data-band" aria-label="Coordinate table">
+          <div class="band-header">
+            <h2>Coordinate Repair</h2>
+            <span id="pointCount">0 points</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Raw lon</th>
+                  <th scope="col">Raw lat</th>
+                  <th scope="col">Fixed lon</th>
+                  <th scope="col">Fixed lat</th>
+                  <th scope="col">Residual</th>
+                </tr>
+              </thead>
+              <tbody id="coordBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
