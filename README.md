@@ -2,6 +2,12 @@
 
 MapFix Spatial is an interactive MVP for correcting distorted geospatial coordinates and rendering a cleaner projection.
 
+Live GitHub Pages demo:
+
+```text
+https://arunshar.github.io/mapfix-spatial/
+```
+
 The browser includes a deterministic fallback correction engine, and `server.py` adds a live OpenAI backend:
 
 - `/api/correct` computes the MapFix correction server-side and asks GPT for a concise geospatial analysis.
