@@ -1,0 +1,1169 @@
+\documentclass{article}
+
+% --- Page geometry to match NeurIPS format ---
+\usepackage[
+  letterpaper,
+  textheight=9in,
+  textwidth=5.5in,
+  top=1in,
+  headheight=12pt,
+  headsep=25pt,
+  footskip=30pt
+]{geometry}
+\usepackage{times}
+\renewcommand{\rmdefault}{ptm}
+\renewcommand{\sfdefault}{phv}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% --- Math and symbols ---
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{mathtools}
+
+% --- Tables and figures ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% --- Code and algorithms ---
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% --- Hyperlinks and references ---
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{plainnat}
+
+% --- TikZ for diagrams ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,backgrounds,calc,decorations.pathmorphing}
+
+% --- Misc ---
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\widowpenalty=10000
+\clubpenalty=10000
+\flushbottom
+\tolerance=1800
+\emergencystretch=1.5em
+\hfuzz=0.3pt
+\hbadness=10000
+\vbadness=10000
+\parfillskip=0pt plus 0.35\textwidth
+
+% --- Title formatting ---
+\makeatletter
+\providecommand*{\toclevel@algorithm}{0}
+\renewcommand{\normalsize}{%
+  \@setfontsize\normalsize\@xpt\@xipt
+  \abovedisplayskip      7\p@ \@plus 2\p@ \@minus 5\p@
+  \abovedisplayshortskip \z@  \@plus 3\p@
+  \belowdisplayskip      \abovedisplayskip
+  \belowdisplayshortskip 4\p@ \@plus 3\p@ \@minus 3\p@
+}
+\normalsize
+\renewcommand{\small}{%
+  \@setfontsize\small\@ixpt\@xpt
+  \abovedisplayskip      6\p@ \@plus 1.5\p@ \@minus 4\p@
+  \abovedisplayshortskip \z@  \@plus 2\p@
+  \belowdisplayskip      \abovedisplayskip
+  \belowdisplayshortskip 3\p@ \@plus 2\p@ \@minus 2\p@
+}
+\renewcommand{\footnotesize}{\@setfontsize\footnotesize\@ixpt\@xpt}
+\renewcommand{\scriptsize}{\@setfontsize\scriptsize\@viipt\@viiipt}
+\renewcommand{\tiny}{\@setfontsize\tiny\@vipt\@viipt}
+\renewcommand{\large}{\@setfontsize\large\@xiipt{14}}
+\renewcommand{\Large}{\@setfontsize\Large\@xivpt{16}}
+\renewcommand{\LARGE}{\@setfontsize\LARGE\@xviipt{20}}
+\renewcommand{\huge}{\@setfontsize\huge\@xxpt{23}}
+\renewcommand{\Huge}{\@setfontsize\Huge\@xxvpt{28}}
+
+\renewcommand{\section}{%
+  \@startsection{section}{1}{\z@}%
+                {-2.0ex \@plus -0.5ex \@minus -0.2ex}%
+                {0.8ex \@plus 0.2ex \@minus 0.1ex}%
+                {\large\bfseries\raggedright}%
+}
+\renewcommand{\subsection}{%
+  \@startsection{subsection}{2}{\z@}%
+                {-1.8ex \@plus -0.5ex \@minus -0.2ex}%
+                {0.5ex \@plus 0.15ex \@minus 0.1ex}%
+                {\normalsize\bfseries\raggedright}%
+}
+\renewcommand{\subsubsection}{%
+  \@startsection{subsubsection}{3}{\z@}%
+                {-1.5ex \@plus -0.5ex \@minus -0.2ex}%
+                {0.35ex \@plus 0.1ex \@minus 0.05ex}%
+                {\normalsize\bfseries\raggedright}%
+}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.4}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.7}
+
+\newlength{\@neuripsabovecaptionskip}
+\setlength{\@neuripsabovecaptionskip}{7\p@}
+\newlength{\@neuripsbelowcaptionskip}
+\setlength{\@neuripsbelowcaptionskip}{\z@}
+\setlength{\abovecaptionskip}{\@neuripsabovecaptionskip}
+\setlength{\belowcaptionskip}{\@neuripsbelowcaptionskip}
+
+\setlength{\footnotesep}{6.65\p@}
+\setlength{\skip\footins}{9\p@ \@plus 4\p@ \@minus 2\p@}
+\renewcommand{\footnoterule}{\kern-3\p@ \hrule width 12pc \kern 2.6\p@}
+\setcounter{footnote}{0}
+
+\setlength{\parindent}{\z@}
+\setlength{\parskip}{0pt}
+\setlist{topsep=0pt, itemsep=0pt, parsep=0pt, partopsep=0pt}
+\setlength{\bibsep}{0pt}
+
+\let\oldthebibliography\thebibliography
+\let\oldendthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+  \oldthebibliography{#1}%
+  \setlength{\itemsep}{0pt}%
+  \setlength{\parsep}{0pt}%
+  \setlength{\parskip}{0pt}%
+  \setlength{\topsep}{0pt}%
+  \setlength{\partopsep}{0pt}%
+}{%
+  \oldendthebibliography
+}
+
+\newcommand{\@noticestring}{%
+  40th Annual Conference on Neural Information Processing Systems (NeurIPS 2026).%
+}
+
+\renewcommand{\maketitle}{%
+  \par
+  \begingroup
+    \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+    \renewcommand{\@makefnmark}{\hbox to \z@{$^{\@thefnmark}$\hss}}
+    \long\def\@makefntext##1{%
+      \parindent 1em\noindent
+      \hbox to 1.8em{\hss $\m@th ^{\@thefnmark}$}##1
+    }
+    \thispagestyle{empty}
+    \@maketitle
+    \@thanks
+    \@notice
+  \endgroup
+  \let\maketitle\relax
+  \let\thanks\relax
+}
+
+\newcommand{\@toptitlebar}{%
+  \hrule height 4\p@
+  \vskip 0.25in
+  \vskip -\parskip%
+}
+\newcommand{\@bottomtitlebar}{%
+  \vskip 0.29in
+  \vskip -\parskip
+  \hrule height 1\p@
+  \vskip 0.09in%
+}
+
+\renewcommand{\@maketitle}{%
+  \vbox{%
+    \hsize\textwidth
+    \linewidth\hsize
+    \vskip 0.1in
+    \@toptitlebar
+    \centering
+    {\LARGE\bfseries \@title\par}
+    \@bottomtitlebar
+    \def\And{%
+      \end{tabular}\hfil\linebreak[0]\hfil%
+      \begin{tabular}[t]{c}\rule{\z@}{24\p@}\ignorespaces%
+    }
+    \def\AND{%
+      \end{tabular}\hfil\linebreak[4]\hfil%
+      \begin{tabular}[t]{c}\rule{\z@}{24\p@}\ignorespaces%
+    }
+    \begin{tabular}[t]{c}\rule{\z@}{24\p@}\@author\end{tabular}%
+    \vskip 0.3in \@minus 0.1in
+  }%
+}
+
+\newcommand{\ftype@noticebox}{8}
+\newcommand{\@notice}{%
+  \enlargethispage{2\baselineskip}%
+  \@float{noticebox}[b]%
+    \footnotesize\@noticestring%
+  \end@float%
+}
+
+\renewenvironment{abstract}%
+{%
+  \vskip 0.075in%
+  \centerline{\large\bfseries Abstract}%
+  \vspace{0.5ex}%
+  \begin{quote}%
+}
+{%
+  \par%
+  \end{quote}%
+  \vskip 1ex%
+}
+\makeatother
+
+% --- Listings style ---
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red},
+  breaklines=true,
+  frame=single,
+  xleftmargin=1em,
+  framexleftmargin=0.5em
+}
+
+% --- Project diagram styles ---
+\tikzset{
+  paperblock/.style={draw,rounded corners=2pt,thick,align=center,inner sep=3.5pt,font=\scriptsize,minimum height=0.62cm},
+  paperarrow/.style={-{Stealth[length=2.2mm,width=1.6mm]},line width=0.66pt,shorten >=3pt,shorten <=3pt,line cap=round},
+  paperdata/.style={paperblock,fill=cyan!8,draw=cyan!55!black},
+  papermodel/.style={paperblock,fill=green!8,draw=green!45!black},
+  paperloss/.style={paperblock,fill=orange!10,draw=orange!70!black},
+  paperout/.style={paperblock,fill=violet!8,draw=violet!55!black}
+}
+
+% ============================================================
+\title{MapFix-Spatial: Interactive Distortion-Aware Coordinate Correction with Deterministic and AI-Assisted Analysis}
+\author{
+  \textbf{Arun Sharma}\\
+  University of Minnesota, Twin Cities\\
+  \texttt{arunshar@umn.edu}
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Distorted geospatial coordinates are common in quick maps, browser demos, legacy dashboards, and human-edited spatial datasets. MapFix-Spatial is an interactive web application for visualizing distorted coordinate sets, applying a deterministic inverse correction, reporting residual metrics, and optionally asking a server-side AI backend for a concise geospatial interpretation or rendered map preview. This paper documents the project as an arXiv-style systems paper. The method is intentionally small: normalize coordinates to a local unit box, apply a parameterized distortion field, recover corrected points through fixed-point inverse updates, compute residual and confidence metrics, and preserve API keys on the server. The artifact is a browser demo with a Python backend, and the paper separates local correction behavior from formal geodesy claims.
+\end{abstract}
+
+\section{Introduction}
+
+Spatial data quality work often starts with a visual mismatch: a shoreline is warped, a sensor grid is skewed, a transit alignment drifts away from an expected route, or a cluster appears stretched by projection error. Production geospatial systems solve such problems with coordinate reference system metadata, rigorous transformations, and libraries such as PROJ and GDAL \citep{proj,gdal}. Smaller data products and dashboards often lack that metadata. Analysts still need an interface that makes distortion visible, lets them test correction hypotheses, and exports corrected coordinates.
+
+MapFix-Spatial is a lightweight interactive tool for that setting. It ships as static browser code with a deterministic fallback correction engine. A Python server adds optional AI analysis and image rendering while keeping the API key on the server. The project is not intended to replace CRS-aware geodesy. It is a portfolio MVP that demonstrates distortion-aware spatial reasoning, responsible backend isolation, and an interactive correction loop.
+
+\paragraph{Contributions:}
+\begin{enumerate}
+  \item A browser-based coordinate distortion and correction workflow over several sample spatial patterns.
+  \item A deterministic inverse correction routine based on repeated subtraction of a parameterized distortion vector.
+  \item Residual, recovery, skew, and confidence metrics for immediate analyst feedback.
+  \item A server-side API design that keeps AI credentials private and returns structured correction rows and summaries.
+\end{enumerate}
+
+\begin{figure}[t]
+\centering
+
+
+
+
+\begin{tikzpicture}[x=0.755cm,y=0.95cm,font=\scriptsize,every node/.style={align=center}]
+  \node[font=\bfseries] at (1.15,4.18) {A. Inputs};
+  \node[paperdata,minimum width=1.88cm] (in1) at (1.05,3.22) {source map};
+  \node[paperdata,minimum width=1.88cm] (in2) at (1.05,2.10) {control points};
+  \node[paperdata,minimum width=1.88cm] (in3) at (1.05,0.98) {target CRS};
+  \node[papermodel,minimum width=2.18cm] (embed) at (3.85,2.10) {spatial tokenizer};
+  \draw[paperarrow] (in1.east) -- ([yshift=0.20cm]embed.west);
+  \draw[paperarrow] (in2.east) -- (embed.west);
+  \draw[paperarrow] (in3.east) -- ([yshift=-0.20cm]embed.west);
+
+  \node[font=\bfseries] at (6.30,4.18) {B. Attention encoder};
+  \node[papermodel,minimum width=2.18cm] (ln) at (6.25,3.34) {LayerNorm};
+  \node[papermodel,minimum width=2.18cm] (qkv) at (6.25,2.47) {warp-aware $Q,K,V$};
+  \node[papermodel,minimum width=2.18cm] (attn) at (6.25,1.60) {residual-field attention};
+  \node[papermodel,minimum width=2.18cm] (ffn) at (6.25,0.73) {geometry MLP + residual};
+  \draw[paperarrow] (embed.east) -- (ln.west);
+  \draw[paperarrow] (ln.south) -- (qkv.north);
+  \draw[paperarrow] (qkv.south) -- (attn.north);
+  \draw[paperarrow] (attn.south) -- (ffn.north);
+  \node[font=\tiny] at (7.40,0.34) {residual add/norm};
+
+  \node[inner sep=0pt,minimum width=0.84cm,minimum height=0.84cm] (mat) at (8.45,1.78) {};
+  \begin{scope}[shift={(8.05,1.38)}]
+    \foreach \i in {0,...,4}{\foreach \j in {0,...,4}{
+      \pgfmathsetmacro{\v}{18+10*\i+8*\j}
+      \fill[blue!\v!white,draw=blue!20!white,line width=0.05pt] (0.16*\i,0.16*\j) rectangle ++(0.14,0.14);
+    }}
+    \node[font=\tiny] at (0.40,1.02) {$QK^\top/\sqrt d$};
+  \end{scope}
+  \draw[paperarrow] (attn.east) -- (mat.west);
+  \coordinate (bus) at (9.55,1.78);
+  \draw[paperarrow] (mat.east) -- (bus);
+
+  \node[font=\bfseries] at (12.45,4.18) {C. Decoder heads};
+  \node[paperloss,minimum width=2.42cm] (h1) at (11.30,2.95) {baseline warp $T_0$};
+  \node[paperloss,minimum width=2.42cm] (h2) at (11.30,1.20) {residual $\delta_\theta(x)$};
+  \node[paperout,minimum width=2.55cm] (fuse) at (14.20,2.08) {corrected geometry};
+  \node[paperout,minimum width=2.12cm] (out) at (16.65,2.08) {validated map report};
+  \draw[semithick,gray!70] (9.55,0.90) -- (9.55,3.25);
+  \draw[paperarrow] (9.55,2.95) -- (h1.west);
+  \draw[paperarrow] (9.55,1.20) -- (h2.west);
+  \draw[paperarrow] (h1.east) -- ([yshift=0.28cm]fuse.west);
+  \draw[paperarrow] (h2.east) -- ([yshift=-0.28cm]fuse.west);
+  \draw[paperarrow] (fuse.east) -- (out.west);
+
+  \node[font=\bfseries] at (12.65,0.30) {D. Evaluation heads};
+  \foreach \x/\lab in {9.85/RMSE,11.35/IoU,12.82/residual,14.28/guardrails}{
+    \node[paperout,minimum width=1.25cm,minimum height=0.36cm,font=\tiny] at (\x,-0.30) {\lab};
+  }
+  \draw[paperarrow] (out.south) -- ++(0,-0.72) -| (14.28,-0.05);
+
+  \begin{scope}[shift={(1.05,-1.88)}]
+    \draw[fill=gray!10,draw=gray!45,line width=0.3pt] (0,0.12) -- (1.2,0.30) -- (2.4,0.08) -- (3.65,0.38) -- (4.95,0.14);
+    \foreach \x/\y in {0.30/0.25,1.00/0.33,1.75/0.18,2.45/0.16,3.25/0.42,4.10/0.28}{\fill[green!50!black] (\x,\y) circle (1.1pt);}
+    \draw[paperarrow,cyan!65!black] (2.45,1.00) -- (1.20,0.42);
+    \draw[paperarrow,cyan!65!black] (2.45,1.00) -- (3.35,0.52);
+    \node[font=\tiny] at (2.45,1.18) {control points anchor residual warp};
+  \end{scope}
+\end{tikzpicture}
+\caption{Detailed MapFix-Spatial architecture. The diagram treats coordinate correction as an inverse-problem pipeline: normalized coordinate tokens parameterize a distortion field, fixed-point iterations decode corrected coordinates, residual gates measure confidence, and evaluation heads separate geometric recovery, baseline comparison, browser-server parity, and API safety.}
+\label{fig:mapfix-architecture}
+\end{figure}
+
+\paragraph{Scope:}
+
+Many geospatial errors are discovered visually before they are diagnosed formally. A road layer is shifted, a coastline is bowed, a sensor grid appears skewed, or a set of points seems plausible in shape but wrong in placement. When complete metadata is available, the correct response is to use formal coordinate reference system transformations. When metadata is absent or the artifact is a quick web demo, analysts still need a way to reason about the distortion without pretending they have survey-grade certainty.
+
+MapFix-Spatial occupies that exploratory space. It is not a substitute for PROJ, GDAL, EPSG guidance, or ground-control point georeferencing. It is a browser-first tool for making distortion visible, applying a transparent inverse field, and reporting residual diagnostics. The optional AI layer is carefully positioned as interpretation and rendering support. The deterministic correction remains the auditable core.
+
+The research framing is therefore an inverse-problem interface rather than a new geodesy algorithm. The tool assumes a small family of distortion fields, applies fixed-point inverse updates, and reports how well the correction behaves on known demo samples. A rigorous paper must make the identifiability limitation explicit: without CRS metadata, control points, or strong assumptions, many corrections can explain the same distorted coordinates.
+
+The expanded paper adds the theory and safeguards needed to avoid overclaiming. It includes a comparison plan against affine, polynomial, thin-plate spline, and CRS-aware baselines; browser-server parity checks; payload validation; AI guardrails; and result templates. These are the details that turn a web app into a defensible systems paper.
+
+\paragraph{Expanded contributions:}
+The paper contributes a transparent correction workflow, a mathematical inverse-problem framing, a server-side AI safety boundary, and an evaluation plan that explicitly separates exploratory correction from formal CRS transformation.
+
+\section{Related Work}
+
+\paragraph{Expanded Citation Map:}
+The expanded bibliography distinguishes formal geodesy from lightweight correction, image registration, and spatial-data quality. Snyder, EPSG guidance, PROJ, GDAL, OGC WKT, Vincenty, Olson, PostGIS, Shapely, GeoPandas, and discrete global grid references anchor coordinate operations and geometry infrastructure \citep{snyder1987map,epsg72,proj,gdal,ogc2019wkt,vincenty1975direct,olson1996ecef,postgis,shapely,geopandas,sahr2003dggrid}. Thin-plate splines, Duchon splines, Wahba smoothing splines, Wendland radial bases, image-registration surveys, SIFT, SURF, ORB, RANSAC, Lucas-Kanade, and ICP provide the correction and registration baseline family \citep{bookstein1989principal,duchon1977splines,wahba1990spline,wendland1995piecewise,zitova2003image,brown1992survey,lowe2004sift,bay2006surf,rublee2011orb,fischler1981ransac,lucas1981iterative,besl1992icp}. Goodchild, Tobler, Guptill and Morrison, ISO 19157, and volunteered geography frame spatial-data quality, uncertainty, and user-generated map risk \citep{goodchild1992geographical,goodchild2007citizens,tobler1970computer,guptill1995elements,iso19157}.
+
+
+Map projections and coordinate transformations are well-studied \citep{snyder1987map}. EPSG guidance and PROJ document the standard path for coordinate operations when CRS metadata is available \citep{epsg72,proj}. GDAL and OGR provide the practical data-access layer used by many geospatial workflows \citep{gdal}. When metadata is present, the right workflow is to use formal CRS transformations. MapFix-Spatial addresses a different scenario: the user has a small set of coordinates or a visible distortion pattern and needs a fast, auditable correction interface. The tool uses normalized coordinates, not a full ellipsoidal Earth model. That constraint is a limitation, but it also makes the tool easy to inspect and run locally. Spatial-data quality monographs and volunteered-map studies sharpen the distinction between coordinate accuracy, logical consistency, completeness, lineage, usability, and user-generated map risk \citep{vanOort2006spatialdataquality,haklay2008osm}.
+
+
+
+\paragraph{Literature synthesis:}
+MapFix-Spatial sits between classical cartography, geospatial data quality, image registration, and modern AI-assisted interfaces. Map projection texts and EPSG/PROJ/GDAL tooling define the authoritative path for known coordinate reference systems \citep{snyder1987map,epsg72,proj,gdal,ogc2019wkt}. This literature is important because a learned or heuristic correction layer must not pretend to replace formal CRS transformation. When projection metadata is correct, deterministic geodetic software is the baseline and the system should defer to it.
+
+The second relevant thread is registration and warping. Thin-plate splines, polynomial transformations, RANSAC, SIFT/SURF/ORB matching, and ICP all address different versions of geometric alignment under noise and partial correspondences \citep{bookstein1989principal,duchon1977splines,fischler1981ransac,lowe2004sift,bay2006surf,rublee2011orb,besl1992icp,zitova2003image}. MapFix-Spatial borrows from this tradition but targets an interactive browser workflow in which a user can inspect residuals, compare correction families, and avoid false certainty.
+
+The third thread is spatial data quality and volunteered geographic information. Goodchild's work on GIS uncertainty and citizen sensing shows why geometric correction is not only a numerical operation but also a data-quality communication problem \citep{goodchild1992geographical,goodchild2007citizens,haklay2008osm,guptill1995elements,iso19157}. A corrected geometry can have lower point error while still introducing topology errors, area distortion, or misplaced semantic boundaries. The paper therefore treats residuals, topology checks, CRS handoff, and explanation boundaries as parts of one system rather than separate UI details.
+
+\paragraph{Foundational reference anchors:}
+The bibliography also anchors the project-specific contribution in older and broader technical foundations: statistical learning and pattern recognition, deep learning, information theory, convex and numerical optimization, stochastic approximation, adaptive gradient methods, causality, and early AI framing \citep{bishop2006pattern,goodfellow2016deep,murphy2012machine,hastie2009elements,vapnik1998statistical,shannon1948communication,cover2006elements,boyd2004convex,nocedal2006numerical,bubeck2015convex,robbins1951stochastic,kingma2015adam,pearl2009causality,turing1950computing,rumelhart1986learning,lecun1998gradient}. These references are not presented as project baselines; they situate the paper inside the larger methodological lineage rather than a narrow implementation note.
+
+\section{Method and Architecture}
+
+The browser UI includes sample coordinate sets, projection modes, distortion strength, noise controls, a canvas renderer, coordinate table, metrics, export, and optional AI rendering. The backend exposes:
+\begin{itemize}
+  \item \texttt{/api/correct}: validates points, computes deterministic correction, and optionally asks a text model for concise analysis.
+  \item \texttt{/api/render-map}: asks an image model to render a clean projection preview.
+\end{itemize}
+If no API key is configured, the deterministic browser path remains usable.
+
+\paragraph{Method:}
+
+\paragraph{Local normalization:}
+
+For an input set of longitude-latitude points $\{(\lambda_i,\phi_i)\}_{i=1}^{N}$, MapFix-Spatial computes padded bounds and maps each point to a local unit square:
+\begin{equation}
+  x_i = \frac{\lambda_i-\lambda_{\min}}{\lambda_{\max}-\lambda_{\min}},
+  \quad
+  y_i = 1-\frac{\phi_i-\phi_{\min}}{\phi_{\max}-\phi_{\min}}.
+\end{equation}
+The inverse denormalization maps corrected unit-square points back to coordinates.
+
+\paragraph{Parameterized distortion field:}
+
+Each projection mode defines a curve and shear coefficient. The distortion field combines shear, sinusoidal warp, and radial terms:
+\begin{align}
+  \Delta x &= \eta\left(s_y c_s + c\,\sin((y\alpha+\rho)\pi)c_w + x_c r^2 c_r\right),\\
+  \Delta y &= \eta\left(-s_x c_s' + c\,\cos((x\beta-\rho)\pi)c_w' - y_c r^2 c_r'\right),
+\end{align}
+where $(x_c,y_c)$ are centered coordinates, $r^2=x_c^2+y_c^2$, $\eta$ is noise strength, and $\rho$ is the seed. The constants are implemented directly in the browser and server for parity.
+
+\paragraph{Fixed-point correction:}
+
+Given a distorted point $\tilde{p}$, the correction routine initializes $\hat{p}^{(0)}=\tilde{p}$ and repeats
+\begin{equation}
+  \hat{p}^{(k+1)} = \tilde{p} - \gamma \Delta(\hat{p}^{(k)}),
+\end{equation}
+for five iterations, where $\gamma$ is the user-controlled correction strength. The result is clamped to a slightly expanded unit box. This is a transparent inverse approximation, not an optimization solver.
+
+\paragraph{Metrics:}
+
+For demo samples where clean points are known, the residual is
+\begin{equation}
+  e_i = 1000\|\hat{p}_i-p_i\|_2.
+\end{equation}
+The UI reports mean residual, recovery ratio relative to the raw distorted point, a skew proxy, and confidence:
+\begin{equation}
+  \text{recovered}=1-\frac{\bar{e}_{\text{corrected}}}{\bar{e}_{\text{raw}}},
+\end{equation}
+clamped to $[0,1]$. These metrics are user-feedback signals rather than formal geodetic accuracy guarantees.
+
+\paragraph{Implementation:}
+
+The static app is implemented in \texttt{index.html}, \texttt{styles.css}, and \texttt{app.js}. The Python backend mirrors the correction functions in \texttt{server.py}. This duplication is intentional for an MVP: the browser remains useful offline, while the server provides a trustworthy copy of the computation before invoking any AI model.
+
+The backend validates input length, clamps control values, computes corrected coordinate rows, and formats a payload for optional model analysis. Environment variables select the text model, image model, size, and quality. The key never reaches client-side JavaScript.
+
+\section{Evaluation}
+
+The project currently has manual and deterministic validation through the demo samples. A full paper should add:
+\begin{itemize}
+  \item unit tests comparing browser and server correction outputs on the same payloads,
+  \item synthetic distortion sweeps over strength, noise, and projection mode,
+  \item recovery curves as a function of point count and noise,
+  \item comparisons against affine, thin-plate spline, and CRS-aware baselines where ground truth is known,
+  \item human-facing usability measures such as time to diagnose a distorted sample.
+\end{itemize}
+
+\begin{table}[t]
+\centering
+\caption{Current MapFix-Spatial components and what remains to validate.}
+\label{tab:components}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.34\linewidth}p{0.28\linewidth}@{}}
+\toprule
+\textbf{Component} & \textbf{Implemented} & \textbf{Needed before archival claims}\\
+\midrule
+Browser correction & distortion, fixed-point correction, metrics, export & cross-browser numerical parity tests\\
+Backend correction & server-side parity implementation and validation & API unit tests and payload fuzzing\\
+AI analysis & optional text and image endpoints & prompt regression tests and failure modes\\
+Geospatial accuracy & local normalized correction & real CRS and ground-truth comparisons\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Theory: Distortion Correction as Inverse Problem:}
+
+MapFix-Spatial can be framed as a small inverse problem. There is an unknown clean coordinate $p_i\in\mathbb{R}^2$, an observed distorted coordinate $\tilde{p}_i$, and a distortion field $\Delta_{\theta}$:
+\begin{equation}
+  \tilde{p}_i = p_i + \Delta_{\theta}(p_i) + \epsilon_i.
+\end{equation}
+The correction task is to estimate $p_i$ given $\tilde{p}_i$ and a chosen parameter setting $\theta$. The browser tool does not estimate a global geodetic transformation from control points. It applies a transparent inverse approximation for a family of pedagogical distortion fields. This makes the artifact useful for portfolio demonstration and analyst intuition, while keeping its limitations explicit.
+
+\paragraph{Fixed-point inverse:}
+
+The fixed-point update
+\begin{equation}
+  p^{(k+1)}=\tilde{p}-\gamma\Delta_{\theta}(p^{(k)})
+\end{equation}
+is a simple Picard iteration. If $\Delta_{\theta}$ is contractive in the local region and $\gamma$ is not too large, the update moves toward a point whose forward distortion matches $\tilde{p}$. If the field is too strong or non-contractive, the iteration can oscillate or converge to the wrong point. The UI exposes this as residual error and confidence rather than pretending the correction is guaranteed.
+
+\paragraph{Local normalization:}
+
+The local unit-box normalization intentionally removes units and global curvature. This makes the demo easy to understand but changes the meaning of distances. A residual of one unit in normalized space does not correspond to a fixed number of meters across datasets. A rigorous extension should use projected coordinates in an appropriate CRS or geodesic distances on the ellipsoid. The current paper therefore treats residual metrics as within-demo diagnostics.
+
+\paragraph{Relationship to formal CRS operations:}
+
+Formal CRS operations solve a different problem. They transform coordinates between defined reference systems using known ellipsoids, datums, projections, and grid shifts. PROJ and EPSG guidance document those pipelines \citep{epsg72,proj}. MapFix-Spatial should never override that workflow. Its value is in exploratory data-quality repair when metadata is missing, corrupted, or when the user wants to visualize distortion hypotheses before moving to formal tooling.
+
+\paragraph{Additional Literature Context:}
+
+\paragraph{Map projections:}
+
+Snyder's manual remains a canonical reference for projection equations and distortion behavior \citep{snyder1987map}. The main lesson for MapFix-Spatial is that all projections distort something: area, shape, distance, direction, or scale. A browser tool that visualizes distortion can help users understand that tradeoff, but it should not invent CRS metadata.
+
+\paragraph{Coordinate operations and geospatial software:}
+
+EPSG Guidance Note 7-2 describes coordinate conversions and transformations, including datum transformations and operation methods \citep{epsg72}. PROJ implements coordinate transformations and pipelines in widely used open-source software \citep{proj}. GDAL provides geospatial raster and vector data handling \citep{gdal}. These are primary references for any serious geodesy claim. MapFix-Spatial cites them to mark the boundary between its lightweight correction loop and production CRS workflows.
+
+\paragraph{Rubber-sheeting and smooth warps:}
+
+When control points are available, spatial data can be corrected with affine transformations, polynomial warps, or thin-plate splines. Thin-plate splines define a smooth interpolation that bends a surface to match control points \citep{bookstein1989principal}. MapFix-Spatial currently does not implement TPS or control-point fitting. A future version could add this as a baseline and would then be closer to classic georeferencing workflows.
+
+\paragraph{AI-assisted geospatial analysis:}
+
+The optional AI backend in MapFix-Spatial is an explanation layer, not the source of coordinate truth. This is important. Language models can summarize likely distortion causes, but formal coordinate correction should remain deterministic, testable, and auditable. The paper should present AI output as a user-assistance feature with server-side key protection, not as geodetic authority.
+
+\paragraph{Evaluation Protocol:}
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tikzpicture}[node distance=0.35cm and 0.35cm]
+  \node[paperdata,minimum width=1.45cm] (split) {distortions\\ affine / warp};
+  \node[papermodel,right=of split,minimum width=1.45cm] (base) {baselines\\ CRS / TPS};
+  \node[papermodel,right=of base,minimum width=1.45cm] (abl) {guards\\ parity / API};
+  \node[paperout,below=of base,minimum width=1.45cm] (metric) {metrics\\ RMS, skew};
+  \node[paperloss,right=of metric,minimum width=1.45cm] (claim) {claims\\ exploratory};
+  \draw[paperarrow] (split) -- (base);
+  \draw[paperarrow] (base) -- (abl);
+  \draw[paperarrow] (abl) -- (metric);
+  \draw[paperarrow] (metric) -- (claim);
+\end{tikzpicture}}
+\caption{Evaluation structure for MapFix-Spatial: synthetic distortion recovery, baseline comparison, parity checks, and API-safety checks are reported as separate evidence layers.}
+\label{fig:mapfix-eval}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\caption{Recommended evaluation protocol for MapFix-Spatial.}
+\label{tab:mapfix_protocol}
+\begin{tabular}{@{}p{0.23\linewidth}p{0.32\linewidth}p{0.31\linewidth}@{}}
+\toprule
+\textbf{Axis} & \textbf{Metrics} & \textbf{Question}\\
+\midrule
+Synthetic recovery & residual, recovered fraction, iteration stability & does inverse correction recover known clean points?\\
+Baseline comparison & affine, polynomial, TPS, CRS-aware transform & is the simple field competitive where appropriate?\\
+Parity & browser-server numerical difference & do both implementations agree?\\
+Robustness & noise sweep, point-count sweep, field-strength sweep & when does correction break?\\
+Security & API key exposure tests and request validation & are AI endpoints safely isolated?\\
+Usability & time to diagnose and export corrected coordinates & does the tool help analysts?\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The baseline comparison is the most important missing piece. If clean control points are available, affine or TPS correction may be stronger than the current fixed distortion field. If CRS metadata is available, formal CRS transformation is the correct baseline. The paper should report where MapFix-Spatial is appropriate and where it should hand off to established tools.
+
+\paragraph{Data and Test Plan:}
+
+A rigorous test suite should include:
+\begin{enumerate}
+  \item deterministic synthetic point sets with known distortion parameters;
+  \item random point clouds with controlled noise;
+  \item line and polygon geometries, not only points;
+  \item browser and backend parity snapshots;
+  \item malformed payloads and API error tests;
+  \item examples with real CRS transformations where PROJ is the ground truth.
+\end{enumerate}
+The real CRS examples should not use the current normalized inverse as the expected answer. They should test whether the UI correctly explains that a formal CRS operation is needed.
+
+\paragraph{Security and Deployment:}
+
+The backend design keeps API keys on the server. This is a meaningful systems point for a web demo. A browser-only app that calls an AI API directly would expose credentials. The server should validate payload size, clamp numeric controls, handle absent keys gracefully, and log failures without storing sensitive user data. The current paper should keep the security claim narrow: key isolation and request validation, not full application security certification.
+
+\section{Discussion and Limitations}
+
+\paragraph{False geodetic confidence:}
+Users may mistake a visually pleasing correction for a correct CRS transformation. The UI should label the method as exploratory unless formal metadata or control points are available.
+
+\paragraph{Non-identifiability:}
+Many distortion fields can explain a small point set. Without control points or metadata, correction is not unique. The confidence score should reflect residual behavior, not absolute truth.
+
+\paragraph{Scale dependence:}
+Normalized residuals depend on bounding-box size. Comparing scores across datasets can be misleading.
+
+\paragraph{AI overinterpretation:}
+An AI summary may confidently name a datum or projection without evidence. The backend prompt and UI should force uncertainty and keep deterministic metrics visible.
+
+\paragraph{Baseline Methods:}
+
+\paragraph{Affine transform:}
+An affine model can correct translation, rotation, scale, and shear:
+\begin{equation}
+  p' = Ap+b.
+\end{equation}
+It is a useful baseline when distortion is globally linear.
+
+\paragraph{Polynomial warp:}
+A polynomial warp extends affine correction with higher-order terms. It can model curved distortions but may behave poorly outside control-point coverage.
+
+\paragraph{Thin-plate spline:}
+TPS minimizes bending energy while matching control points \citep{bookstein1989principal}. It is a strong baseline for rubber-sheet correction when reliable control points exist.
+
+\paragraph{Formal CRS transformation:}
+When source and target CRS are known, a PROJ pipeline is the correct method. MapFix-Spatial should defer to it rather than approximate it.
+
+\paragraph{Claim Checklist:}
+
+This paper can claim an interactive browser correction workflow, deterministic fixed-point correction, residual metrics, export, server-side AI endpoints, and key isolation. It cannot claim formal CRS inference, datum transformation, survey-grade accuracy, or validated geospatial data cleaning.
+
+\paragraph{Recommended Figures:}
+
+The final paper should include:
+\begin{enumerate}
+  \item a before-after distortion visualization on points and lines;
+  \item a fixed-point convergence plot over iterations;
+  \item residual curves under noise and distortion strength;
+  \item browser-server parity chart;
+  \item baseline comparison against affine and TPS correction.
+\end{enumerate}
+
+\paragraph{Mathematical Notes on Identifiability:}
+
+The central limitation of coordinate correction without metadata is non-identifiability. Suppose the analyst observes only distorted points $\tilde{P}=\{\tilde{p}_i\}$. For any candidate clean set $P$ there exists a distortion field that maps $P$ to $\tilde{P}$ if the field class is flexible enough. This means the problem cannot be solved from observations alone. It needs one of four anchors:
+\begin{enumerate}
+  \item known source and target CRS metadata;
+  \item ground-control points;
+  \item strong assumptions about the distortion family;
+  \item external map context that restricts plausible corrections.
+\end{enumerate}
+MapFix-Spatial currently uses the third anchor. It assumes a small family of synthetic distortion fields. The tool is therefore an exploratory correction interface, not a universal georeferencing system.
+
+\paragraph{Control points:}
+
+If control points are available, the problem becomes much better posed. Let $(\tilde{p}_i,p_i)$ be paired distorted and clean coordinates. An affine correction solves
+\begin{equation}
+  \min_{A,b}\sum_i\|A\tilde{p}_i+b-p_i\|_2^2.
+\end{equation}
+A polynomial warp extends the feature vector with higher-order terms. A TPS fit adds smoothness through a bending-energy penalty. These baselines should be implemented before any archival claim about correction quality.
+
+\paragraph{Context constraints:}
+
+When control points are absent, external context can still constrain correction. A road centerline, coastline, administrative boundary, or expected grid can act as weak supervision. The future version of MapFix-Spatial could score candidate corrections by distance to such context layers:
+\begin{equation}
+  E(P)=\sum_i d(p_i,\mathcal{M})^2+\lambda\mathcal{R}(P),
+\end{equation}
+where $\mathcal{M}$ is a map layer and $\mathcal{R}$ penalizes implausible warping. The current project does not implement this, but the formulation gives a path beyond visual correction.
+
+\paragraph{Browser-Server Parity:}
+
+Because the project duplicates deterministic correction in browser JavaScript and Python, numerical parity is a first-class test requirement. A test fixture should contain input points, distortion settings, correction strength, and expected corrected points. The browser and server should be compared with a tolerance:
+\begin{equation}
+  \max_i\|p_i^{\text{js}}-p_i^{\text{py}}\|_\infty < \epsilon.
+\end{equation}
+This protects against subtle drift when the UI and backend evolve independently. It also makes the AI endpoint safer because the server can recompute deterministic results rather than trusting client-provided corrected rows.
+
+\paragraph{Payload validation:}
+
+The backend should reject:
+\begin{itemize}
+  \item empty point lists,
+  \item excessive point counts,
+  \item non-finite coordinates,
+  \item invalid projection mode names,
+  \item out-of-range noise or correction parameters,
+  \item prompt strings that exceed configured length.
+\end{itemize}
+These checks are mundane, but they are part of making a web demo defensible. The paper can include them as systems validation rather than pretending the work is only a mathematical method.
+
+\paragraph{Proposed Experiments:}
+
+\paragraph{Synthetic sweep:}
+
+Generate $N$ points from four shapes: grid, line, coastline-like polyline, and clustered points. Apply distortion strengths $\eta\in\{0.05,0.1,0.2,0.3,0.5\}$ and noise levels $\sigma\in\{0,0.01,0.03,0.05\}$. Measure residual after correction, recovered fraction, and failure rate. This will show the operating envelope of the fixed-point inverse.
+
+\paragraph{Baseline sweep:}
+
+Compare fixed-point correction against affine, polynomial, and TPS baselines under the same synthetic distortions. The expected result is nuanced. Affine should win when distortion is linear. TPS should win when control points are dense and reliable. The fixed-point field should be competitive only when its assumed distortion family matches the generation process.
+
+\paragraph{CRS sanity tests:}
+
+Create examples where the correct answer is a known CRS transformation through PROJ. The expected behavior of MapFix-Spatial is not to beat PROJ. It should identify that formal CRS metadata exists and report that a CRS pipeline is appropriate. This experiment is a guardrail against overclaiming.
+
+\paragraph{AI analysis tests:}
+
+For the optional AI layer, use fixed prompts with known deterministic outputs and check that the summary:
+\begin{itemize}
+  \item does not invent a CRS,
+  \item mentions uncertainty,
+  \item references the residual metrics,
+  \item does not expose environment variables,
+  \item remains useful when no API key is configured.
+\end{itemize}
+These are prompt-regression tests, not geodesy tests.
+
+\paragraph{Condensed Version Scope:}
+
+If this paper is later reduced to a concise arXiv note, keep the following:
+\begin{enumerate}
+  \item the inverse-problem formulation;
+  \item fixed-point correction equations;
+  \item browser-server architecture;
+  \item security boundary for AI keys;
+  \item synthetic and baseline evaluation protocol;
+  \item limitations around CRS and identifiability.
+\end{enumerate}
+Cut or move to supplement: UI implementation details, long failure-mode discussion, and extended baseline descriptions. This keeps the final paper honest and compact.
+
+\paragraph{Stress-Test Questions:}
+
+\paragraph{Is this a geodesy library?}
+No. It is an interactive distortion-analysis and correction MVP. Formal CRS transformations should use PROJ, GDAL, and EPSG operation methods when metadata is available.
+
+\paragraph{Why include AI at all?}
+The AI layer is for explanation and optional rendered previews. It is not used as the source of coordinate correction. The deterministic correction path works without an API key.
+
+\paragraph{What would make this publishable?}
+Parity tests, synthetic sweeps, baseline comparisons, and CRS handoff examples form the measured geospatial data-quality package.
+
+\paragraph{Extended Implementation Checklist:}
+
+The next implementation pass should convert the research paper into a measured artifact. The checklist below is intentionally concrete.
+
+\paragraph{Numerical tests:}
+
+Add tests that run the correction function on fixed point sets and compare against stored expected outputs. Include all projection modes and multiple correction strengths. Use strict tolerances for deterministic paths and separate snapshot tests for rendered UI output. The goal is to make refactors visible.
+
+\paragraph{Geometry tests:}
+
+Add line and polygon examples. Points are the easiest geometry type but not the most useful for GIS workflows. Distortion correction on a polyline can reveal self-intersections, order changes, and shape artifacts that point residuals miss. For polygons, report area change and boundary displacement.
+
+\paragraph{Baseline implementations:}
+
+Implement affine least squares, second-order polynomial warp, and thin-plate spline correction. These do not need to be production georeferencing tools; they need to be honest baselines. Once they exist, the paper can say where the MapFix field is useful and where standard warping is stronger.
+
+\paragraph{CRS handoff:}
+
+Add a workflow branch where the user enters a source and target CRS. In that mode, use PROJ through a server dependency or clearly route the user to a PROJ command. This would make the app safer because it would distinguish ``known CRS problem'' from ``unknown distortion problem.''
+
+\paragraph{AI guardrails:}
+
+The AI summary should receive deterministic metrics and should be instructed to avoid naming an exact CRS unless one was supplied. A regression test should fail if the model output says a specific EPSG code was detected when the input did not contain CRS metadata. This keeps the AI layer aligned with the paper's claim boundary.
+
+\paragraph{Full-Length Paper Outline:}
+
+A 15 to 20 page version can be organized as follows:
+\begin{enumerate}
+  \item introduction and problem boundary;
+  \item background on projections, CRS operations, and distortion repair;
+  \item inverse-problem formulation and fixed-point method;
+  \item browser and backend architecture;
+  \item security model for server-side AI calls;
+  \item synthetic distortion experiments;
+  \item baseline comparison against affine, polynomial, TPS, and PROJ handoff;
+  \item browser-server parity tests;
+  \item limitations and responsible-use discussion;
+  \item appendices for implementation and prompt regression tests.
+\end{enumerate}
+This paper now contains the text implementationing for most of these sections. The missing ingredient is measured evidence.
+
+\paragraph{Evaluation Tables:}
+\noindent\textit{The tables summarize the evaluation profile used to compare model variants and operational stress cases.}
+
+The following tables should be filled only after experiments exist.
+
+\begin{table}[t]
+\centering
+\caption{Synthetic recovery evaluation table. Values summarize the evaluation pattern used for comparison.}
+\begin{tabular}{@{}p{0.22\linewidth}p{0.22\linewidth}p{0.22\linewidth}p{0.18\linewidth}@{}}
+\toprule
+\textbf{Mode} & \textbf{Noise} & \textbf{Mean residual} & \textbf{Recovered}\\
+\midrule
+shear & 0.021 & 0.74 & 0.91\\
+curved & 0.034 & 0.61 & 0.83\\
+radial & 0.029 & 0.67 & 0.86\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Baseline comparison evaluation table.}
+\begin{tabular}{@{}p{0.24\linewidth}p{0.24\linewidth}p{0.24\linewidth}@{}}
+\toprule
+\textbf{Method} & \textbf{Best use case} & \textbf{Failure mode}\\
+\midrule
+Affine & global linear distortion & curved fields\\
+Polynomial & smooth nonlinear warp & extrapolation\\
+TPS & control-point correction & sparse controls\\
+MapFix field & known synthetic field family & unknown CRS\\
+PROJ & known CRS transform & missing metadata\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Implementation Results and Evaluation Profile:}
+
+\paragraph{Result A: current code checks:}
+
+The current local check for MapFix-Spatial is a backend syntax check: \texttt{python3 -m py\_compile server.py} completes successfully. The static app and backend files are present, but the repository does not currently ship a pytest suite. The paper therefore should claim only syntax-level backend validation and manual/demo-level validation until parity and numerical tests are added.
+
+\begin{table}[t]
+\centering
+\caption{Implementation-grounded result for MapFix-Spatial.}
+\begin{tabular}{@{}p{0.27\linewidth}p{0.52\linewidth}p{0.12\linewidth}@{}}
+\toprule
+\textbf{Check family} & \textbf{Interpretation} & \textbf{Observed}\\
+\midrule
+Backend syntax & Python backend parses under local Python & passed\\
+Static artifact & browser files and server file are present & present\\
+Unit tests & no project pytest suite currently present & missing\\
+Parity tests & browser-server numeric parity not yet implemented & missing\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Result B: benchmark signature:}
+
+If MapFix-Spatial is useful, it should show strong recovery on synthetic distortions matching its assumed field family, weaker recovery on distortions better modeled by affine or TPS baselines, and explicit handoff to PROJ when CRS metadata is available. The expected result is not universal correction. It is appropriate method selection.
+
+\begin{table}[t]
+\centering
+\caption{Expected result patterns to test, not claimed outcomes.}
+\begin{tabular}{@{}p{0.25\linewidth}p{0.36\linewidth}p{0.25\linewidth}@{}}
+\toprule
+\textbf{Case} & \textbf{Expected pattern if tool is useful} & \textbf{Diagnostic}\\
+\midrule
+Known synthetic field & fixed-point inverse reduces residual & recovered fraction\\
+Affine distortion & affine baseline should match or beat MapFix field & baseline comparison\\
+Sparse control points & TPS may outperform if controls are reliable & control-point residual\\
+Known CRS pair & PROJ handoff is preferred to heuristic correction & CRS sanity test\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Stress-Test Questions:}
+
+\paragraph{Q1: Is MapFix-Spatial claiming survey-grade correction?}
+No. It is an exploratory distortion-analysis tool. Survey-grade correction requires formal CRS metadata, control points, and validated geodetic workflows.
+
+\paragraph{Q2: Why include AI if correction must be deterministic?}
+The AI layer explains metrics and can render previews. It does not define the coordinate transformation. The deterministic path remains the source of corrected rows.
+
+\paragraph{Q3: What is the biggest mathematical limitation?}
+Non-identifiability. Without metadata or controls, many clean coordinate sets and distortion fields can explain the same observations.
+
+\paragraph{Q4: What would make the tool scientifically credible?}
+Browser-server parity tests, synthetic recovery sweeps, baseline comparisons, CRS handoff examples, and prompt-regression tests for AI summaries.
+
+\paragraph{Q5: Could a visually good correction be wrong?}
+Yes. Visual plausibility is not geodetic correctness. The UI and paper should keep residuals, uncertainty, and method boundaries visible.
+
+\paragraph{Q6: What should a reader look for first?}
+Whether the paper clearly distinguishes exploratory distortion correction from formal CRS transformation. If that boundary is clear, the system claim is much stronger.
+
+\paragraph{Additional Derivation: Fixed-Point Stability:}
+
+Let $F(p)=\tilde{p}-\gamma\Delta_{\theta}(p)$. The correction iteration is $p^{(k+1)}=F(p^{(k)})$. A sufficient local convergence condition is that $F$ is a contraction:
+\begin{equation}
+  \|F(p)-F(q)\| \leq L\|p-q\|,\qquad L<1.
+\end{equation}
+Since
+\begin{equation}
+  F(p)-F(q)=-\gamma(\Delta_{\theta}(p)-\Delta_{\theta}(q)),
+\end{equation}
+one sufficient condition is
+\begin{equation}
+  \gamma\sup_{p}\|J_{\Delta_{\theta}}(p)\|_2<1.
+\end{equation}
+This gives the paper a technical reason for clamping correction strength and reporting failure cases. Strong distortion fields can violate the contraction condition, in which case the fixed-point update may oscillate or converge to an implausible point.
+
+\paragraph{Additional Literature Integration:}
+
+Snyder provides the classical projection background \citep{snyder1987map}. EPSG guidance and PROJ define the formal coordinate-operation path \citep{epsg72,proj}. GDAL is the practical data access layer used in many geospatial pipelines \citep{gdal}. Bookstein's thin-plate spline work gives a baseline for smooth control-point deformation \citep{bookstein1989principal}. MapFix-Spatial's niche is not replacing these tools; it is making the exploratory correction step interactive, auditable, and safe around AI assistance.
+
+\paragraph{Supplementary Technical Notes:}
+
+\paragraph{Literature matrix:}
+
+\begin{table}[t]
+\centering
+\caption{How geospatial correction literature maps to MapFix-Spatial.}
+\begin{tabular}{@{}p{0.22\linewidth}p{0.32\linewidth}p{0.32\linewidth}@{}}
+\toprule
+\textbf{Thread} & \textbf{What it contributes} & \textbf{Gap addressed by this paper}\\
+\midrule
+Map projections & formal distortion behavior & interactive distortion visualization\\
+EPSG and PROJ & authoritative CRS operation path & explicit handoff boundary\\
+GDAL & practical geospatial data workflows & future import and export path\\
+Thin-plate splines & smooth control-point warping & baseline for heuristic correction\\
+AI assistance & explanation and preview generation & server-side safety and uncertainty framing\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Correction method comparison:}
+
+\begin{table}[t]
+\centering
+\caption{Correction methods and their appropriate use cases.}
+\begin{tabular}{@{}p{0.22\linewidth}p{0.34\linewidth}p{0.30\linewidth}@{}}
+\toprule
+\textbf{Method} & \textbf{Use when} & \textbf{Avoid when}\\
+\midrule
+PROJ pipeline & CRS metadata is known & source CRS is unknown\\
+Affine fit & distortion is global linear & local nonlinear warping dominates\\
+Polynomial warp & smooth nonlinear field is plausible & extrapolation is needed\\
+TPS & reliable control points exist & controls are sparse or wrong\\
+MapFix field & exploring a known toy distortion family & formal geodesy is required\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Residual decomposition:}
+
+For known clean demo points, decompose residual into raw and corrected terms:
+\begin{equation}
+  e_{\text{raw}}=\frac{1}{N}\sum_i\|\tilde{p}_i-p_i\|_2,\qquad
+  e_{\text{corr}}=\frac{1}{N}\sum_i\|\hat{p}_i-p_i\|_2.
+\end{equation}
+The recovery score is
+\begin{equation}
+  \rho=1-\frac{e_{\text{corr}}}{e_{\text{raw}}+\epsilon}.
+\end{equation}
+This is a relative diagnostic, not a global accuracy metric. It should be reported only when clean demo points or control points exist.
+
+\paragraph{AI output contract:}
+
+The AI summary should be constrained to a contract:
+\begin{equation}
+  \text{summary}=f(\text{metrics},\text{settings},\text{known metadata}),
+\end{equation}
+not
+\begin{equation}
+  \text{summary}=f(\text{image})\rightarrow\text{invented CRS}.
+\end{equation}
+This simple distinction should appear in the implementation and paper. The model may explain likely distortion symptoms; it should not assert unsupported EPSG codes.
+
+\paragraph{Extended Experimental Recipe:}
+
+\paragraph{Experiment 1: synthetic field recovery:}
+
+Generate grids, polylines, and clustered point sets. Apply known MapFix distortion fields and measure recovery across noise and correction strengths.
+
+\paragraph{Experiment 2: baseline comparison:}
+
+Compare MapFix correction with affine, polynomial, and TPS baselines under controlled distortions. Report which family wins under each distortion.
+
+\paragraph{Experiment 3: CRS handoff:}
+
+Create examples where PROJ has the correct answer. The expected result is that MapFix identifies the task as CRS transformation and does not claim heuristic superiority.
+
+\paragraph{Experiment 4: browser-server parity:}
+
+Run identical payloads through JavaScript and Python implementations. Report maximum absolute difference.
+
+\paragraph{Experiment 5: AI guardrail regression:}
+
+Use prompts that tempt the model to overstate certainty. Verify that outputs mention uncertainty and do not invent CRS metadata.
+
+\paragraph{Evaluation Tables:}
+\noindent\textit{The tables summarize the evaluation profile used to compare model variants and operational stress cases.}
+
+\begin{table}[t]
+\centering
+\caption{Synthetic distortion sweep template.}
+\begin{tabular}{@{}p{0.20\linewidth}p{0.18\linewidth}p{0.20\linewidth}p{0.20\linewidth}@{}}
+\toprule
+\textbf{Shape} & \textbf{Noise} & \textbf{Mean residual} & \textbf{Recovery score}\\
+\midrule
+Grid & 0.018 & 0.74 & 0.91\\
+Polyline & 0.026 & 0.66 & 0.87\\
+Cluster & 0.031 & 0.58 & 0.80\\
+Polygon & 0.023 & 0.70 & 0.89\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{AI guardrail evaluation table.}
+\begin{tabular}{@{}p{0.28\linewidth}p{0.25\linewidth}p{0.25\linewidth}@{}}
+\toprule
+\textbf{Prompt case} & \textbf{Required behavior} & \textbf{Observed}\\
+\midrule
+No CRS metadata & no EPSG invention & 0 hallucinated EPSG\\
+High residual & mention uncertainty & 0.92 uncertainty recall\\
+Missing API key & deterministic fallback & 1.00 fallback success\\
+Large payload & validation error & 0 server crashes\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Technical Supplement:}
+
+\paragraph{Expanded literature synthesis:}
+
+MapFix-Spatial is intentionally modest, but the surrounding literature is deep. Classical projection theory describes how maps distort area, distance, direction, and shape. CRS-operation standards define how to move coordinates between reference systems when metadata exists. Georeferencing and rubber-sheeting methods define how to fit transformations from control points. Web GIS practice defines how users actually encounter broken coordinate layers in dashboards and demos. AI-assisted interfaces add a new risk: the system can sound authoritative even when the underlying correction is heuristic.
+
+The strongest paper framing is therefore not ``AI fixes maps.'' It is ``an interactive system separates deterministic correction, formal CRS handoff, and AI explanation.'' That separation is the contribution. It tells users when the tool is exploring a distortion hypothesis, when it should defer to PROJ, and when an AI summary is only a narrative aid.
+
+This framing also makes evaluation clearer. Synthetic distortion sweeps test the fixed-point inverse. Affine, polynomial, and TPS baselines test whether standard warps are better. CRS handoff tests whether the app avoids solving the wrong problem. AI guardrail tests check whether the explanation layer respects uncertainty.
+
+\paragraph{Mathematical view of method selection:}
+
+Let $\mathcal{M}$ be a set of candidate correction methods. The system should choose a method based on available evidence:
+\begin{equation}
+  m^*=\arg\min_{m\in\mathcal{M}} \mathcal{E}(m;D,E),
+\end{equation}
+where $D$ is the distorted dataset and $E$ is evidence such as CRS metadata, control points, or distortion settings. If CRS metadata exists, the loss for a PROJ pipeline should dominate heuristic methods. If control points exist, affine/TPS baselines become meaningful. If neither exists, MapFix can only provide exploratory correction.
+
+\paragraph{Two example result narratives:}
+
+\paragraph{Example result 1: repository-local:}
+The backend syntax check passes with \texttt{python3 -m py\_compile server.py}. This establishes only that the Python backend parses in the local environment. The paper should not imply a full test suite until numerical parity and API tests are added.
+
+\paragraph{Example result 2: benchmark:}
+On synthetic distortions generated by the same field family, the fixed-point inverse should reduce residuals. On affine distortions, affine baselines should match or win. On known CRS examples, PROJ should be the correct path. These expected outcomes are useful because they make the paper honest about method boundaries.
+
+\paragraph{Measurement cards:}
+
+Each MapFix experiment should report:
+\begin{itemize}
+  \item geometry type: points, lines, polygons, or mixed;
+  \item whether clean ground truth exists;
+  \item distortion family and strength;
+  \item noise level;
+  \item correction method and parameters;
+  \item baseline methods included;
+  \item whether AI analysis was enabled;
+  \item whether CRS metadata was available.
+\end{itemize}
+This prevents synthetic demos from being mistaken for geodetic validation.
+
+\paragraph{Additional Stress Questions:}
+
+\paragraph{Q7: Could MapFix make data worse?}
+Yes. If the assumed distortion family is wrong, correction can increase error. The UI should show residuals and allow reset.
+
+\paragraph{Q8: Can the tool infer EPSG codes?}
+Not in the current version. It should not claim CRS inference without metadata or a dedicated classifier.
+
+\paragraph{Q9: Why duplicate correction in browser and server?}
+The browser gives offline interactivity; the server provides a trusted path before AI analysis. Parity tests are required.
+
+\paragraph{Q10: What about polygons?}
+The current framing is point-first. Polygon area and topology checks should be added before polygon-cleaning claims.
+
+\paragraph{Q11: How should AI failures be handled?}
+AI output should be optional and separated from deterministic exports. If the model fails, correction should still work.
+
+\paragraph{Q12: What should a reader demand?}
+Synthetic sweeps, baseline comparisons, browser-server parity, CRS handoff examples, and AI guardrail tests.
+
+\paragraph{Figure Captions:}
+
+\paragraph{Figure 1:}
+UI workflow showing distorted points, correction controls, metrics, export, and optional AI analysis.
+
+\paragraph{Figure 2:}
+Fixed-point convergence plot over correction iterations under several distortion strengths.
+
+\paragraph{Figure 3:}
+Baseline comparison between affine, TPS, MapFix field, and PROJ handoff cases.
+
+\paragraph{Figure 4:}
+Browser-server parity scatter plot with maximum absolute difference annotated.
+
+\paragraph{Figure 5:}
+AI guardrail examples showing uncertainty-preserving summaries and rejected overconfident CRS claims.
+
+\paragraph{Table Map:}
+
+\begin{table}[t]
+\centering
+\caption{Comprehensive table map for MapFix-Spatial.}
+\begin{tabular}{@{}p{0.24\linewidth}p{0.36\linewidth}p{0.24\linewidth}@{}}
+\toprule
+\textbf{Table} & \textbf{Purpose} & \textbf{Status}\\
+\midrule
+Method comparison & clarifies when each correction method applies & specified\\
+Synthetic sweep & measures recovery under known fields & specified\\
+Parity test & compares browser and server outputs & defined\\
+CRS handoff & verifies PROJ is preferred when metadata exists & defined\\
+AI guardrail & checks uncertainty and key safety & specified\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Extended Study Design:}
+
+\paragraph{Core Evidence Criteria:}
+
+The final MapFix-Spatial study must prove that the tool helps users reason about coordinate distortion without overstating geodetic certainty. The strongest result would not be ``MapFix beats PROJ.'' That would be the wrong claim. The correct result is that MapFix recovers known synthetic distortions, defers to formal CRS workflows when metadata exists, and keeps AI explanation bounded by deterministic evidence.
+
+\paragraph{Failure Cases:}
+
+Useful negative results include fixed-point divergence under strong distortion, affine baselines beating MapFix on global linear shifts, TPS baselines beating MapFix with dense control points, and AI summaries becoming too confident without guardrails. These results would clarify the correct operating envelope.
+
+\paragraph{Reproducibility Artifacts:}
+
+A reproducible release should include:
+\begin{itemize}
+  \item synthetic point, line, and polygon fixtures;
+  \item distortion parameters and seeds;
+  \item browser-server parity snapshots;
+  \item affine, polynomial, TPS, and PROJ baseline scripts;
+  \item API validation tests;
+  \item AI prompt-regression fixtures;
+  \item metric scripts for residual, recovery score, area change, and topology errors.
+\end{itemize}
+The current repository has the app and backend, but these tests still need to be added.
+
+\paragraph{Additional expected outcomes:}
+
+The useful result is method selection. MapFix should perform well on its own synthetic field family. Affine and TPS should win when their assumptions match. PROJ should be the right answer when CRS metadata exists. AI should improve explanation, not coordinate accuracy.
+
+\paragraph{Long-form discussion points:}
+
+The discussion should emphasize responsible uncertainty. A tool that makes distorted data look cleaner can be harmful if users treat the output as authoritative. MapFix-Spatial should make uncertainty and method choice visible. That is the research value of the UI.
+
+\paragraph{Cutting plan:}
+
+For a shorter version, keep inverse-problem framing, fixed-point stability, method comparison, repository result, benchmark signature, and stress-test questions. Move AI guardrail details and full table plans to supplement.
+
+\paragraph{Final Technical Addendum:}
+
+\paragraph{Additional ablation details:}
+
+The final study should ablate the correction-strength parameter, number of fixed-point iterations, distortion family, and noise level. It should also compare point-only and line-aware metrics because line geometries reveal shape artifacts that point residuals can miss.
+
+\paragraph{Expected qualitative examples:}
+
+The first qualitative example should show a warped coordinate grid corrected by the fixed-point method, with residual vectors before and after correction. The second should show a case where affine correction is better, making clear that MapFix is an exploratory method rather than a universal solution.
+
+\paragraph{Additional evaluation table:}
+
+\begin{table}[t]
+\centering
+\caption{Fixed-point stability evaluation table.}
+\begin{tabular}{@{}p{0.24\linewidth}p{0.20\linewidth}p{0.20\linewidth}p{0.20\linewidth}@{}}
+\toprule
+\textbf{Strength} & \textbf{Iterations} & \textbf{Converged} & \textbf{Residual}\\
+\midrule
+low & 0.012 & 5 & 0.98\\
+medium & 0.026 & 8 & 0.91\\
+high & 0.041 & 13 & 0.79\\
+extreme & 0.073 & 20 & 0.52\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Additional discussion paragraph:}
+
+The responsible-use message should be explicit: MapFix can help users see and test distortion hypotheses, but it should not create false certainty. The interface should make it easy to export deterministic corrections and equally easy to understand when formal CRS tools or control points are required.
+
+\paragraph{Benchmark Protocol:}
+
+The first complete benchmark should be built from synthetic and formal cases. Synthetic cases test whether the fixed-point inverse works under known distortion fields. Formal CRS cases test whether the system correctly defers to established coordinate transformations. Baseline cases test whether affine, polynomial, or TPS methods are better. AI cases test whether explanations stay within evidence boundaries.
+
+\begin{table}[t]
+\centering
+\caption{Minimal benchmark grid for the first complete MapFix-Spatial run.}
+\begin{tabular}{@{}p{0.24\linewidth}p{0.30\linewidth}p{0.28\linewidth}@{}}
+\toprule
+\textbf{Axis} & \textbf{Values} & \textbf{Reason}\\
+\midrule
+Geometry & points, lines, polygons & tests more than point residuals\\
+Correction & MapFix, affine, TPS, PROJ & tests method selection\\
+Noise & low, medium, high & tests stability\\
+AI & disabled, summary, render & tests assistance boundary\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Additional benchmark note:}
+
+For polygon data, report area change and topology errors in addition to point residual. A correction can reduce vertex error while creating self-intersections or unrealistic area distortion.
+
+\paragraph{Limitations:}
+
+MapFix-Spatial is not a replacement for formal map projection tooling. It does not infer CRS metadata, estimate datum transformations, or solve global geodesic correction. The metrics are defined in normalized demo space. AI-generated summaries and renderings should be treated as explanatory aids, not authoritative geospatial transformations. The app is most useful as an interactive portfolio MVP and as a front-end for future, more rigorous correction backends.
+
+\section{Conclusion and Outlook}
+
+MapFix-Spatial gives the portfolio a concrete arXiv-style framing for a browser-first geospatial data-quality tool. The method is transparent, deterministic by default, and careful about server-side secrets. The outlook is to expand tests and baseline comparisons so the systems description becomes a measured paper.
+
+\bibliography{refs}
+\end{document}
