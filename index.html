@@ -92,7 +92,7 @@ footer{padding:26px 0 50px;color:var(--mut);font-size:13.5px;text-align:center}
   <table>
     <thead><tr><th>Component</th><th>Status</th></tr></thead>
     <tbody>
-      <tr><td>Distortion model + fixed-point correction + metrics</td><td><span class="ok">Real</span>, deterministic, runs</td></tr>
+      <tr><td>Distortion model + fixed-point correction + metrics</td><td><span class="ok">Real</span>, deterministic, runs. Reproduced: recovers ~72% of the distortion (mean residual ~2.8 px) on the Mercator-repair profile; see <a href="https://github.com/arunshar/mapfix-spatial/blob/main/EVIDENCE.md">EVIDENCE</a></td></tr>
       <tr><td>Interactive browser demo</td><td><span class="ok">Real</span>, <a href="./app.html">live</a></td></tr>
       <tr><td>OpenAI text + image layer</td><td><span class="ok">Real but optional</span> (falls back without a key)</td></tr>
       <tr><td>Correction of <i>real</i> misregistered maps</td><td><span class="scaf">Not yet</span> (distortion is synthetic/parametric)</td></tr>
