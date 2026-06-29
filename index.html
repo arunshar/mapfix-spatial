@@ -92,14 +92,15 @@ footer{padding:26px 0 50px;color:var(--mut);font-size:13.5px;text-align:center}
   <table>
     <thead><tr><th>Component</th><th>Status</th></tr></thead>
     <tbody>
-      <tr><td>Distortion model + fixed-point correction + metrics</td><td><span class="ok">Real</span>, deterministic, runs. Reproduced: recovers ~72% of the distortion (mean residual ~2.8 px) on the Mercator-repair profile; see <a href="https://github.com/arunshar/mapfix-spatial/blob/main/EVIDENCE.md">EVIDENCE</a></td></tr>
+      <tr><td>Georeferencing on the <i>real</i> Web Mercator distortion (TPS)</td><td><span class="ok">Reproduced</span>: a thin-plate spline fit to real GCPs against the genuine Web Mercator projection cuts held-out ground RMSE from <b>~1,338 km (raw)</b> / <b>~24 km (affine)</b> to <b>~2.5 km</b> (89% better than affine); see <a href="https://github.com/arunshar/mapfix-spatial/blob/main/EVIDENCE.md">EVIDENCE</a></td></tr>
+      <tr><td>Distortion model + fixed-point correction + metrics</td><td><span class="ok">Real</span>, deterministic, runs. Illustrative demo: recovers ~72% of the distortion (mean residual ~2.8 px) on a synthetic Mercator-repair profile</td></tr>
       <tr><td>Interactive browser demo</td><td><span class="ok">Real</span>, <a href="./app.html">live</a></td></tr>
       <tr><td>OpenAI text + image layer</td><td><span class="ok">Real but optional</span> (falls back without a key)</td></tr>
-      <tr><td>Correction of <i>real</i> misregistered maps</td><td><span class="scaf">Not yet</span> (distortion is synthetic/parametric)</td></tr>
+      <tr><td>Correction of <i>real scanned</i> misregistered maps</td><td><span class="scaf">Not yet</span> (the interactive demo's distortion is synthetic; the reproduced RMSE above uses the real Web Mercator distortion)</td></tr>
     </tbody>
   </table>
   <h3>Honest next step</h3>
-  <p>Feed real misregistered control points (GCPs with known offsets) instead of the synthetic warp, fit the distortion field with a thin-plate spline rather than assuming the parametric model, and report a real RMSE before/after on held-out control points.</p>
+  <p>The thin-plate-spline georeferencing on real GCPs against the real Web Mercator distortion is <b>done</b> (held-out RMSE above). Next: extend to real <i>scanned</i> maps with manually digitized GCPs (lens/rubber-sheet warp), and add a 2nd-order polynomial baseline alongside affine and TPS.</p>
 </div></section>
 
 <section><div class="wrap">

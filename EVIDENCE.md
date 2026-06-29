@@ -1,10 +1,36 @@
 # mapfix-spatial — reproduced evidence
 
-_Generated 2026-06-29T17:14:20Z by running the deterministic correction engine (`server.py`) on sample points._
+_Generated 2026-06-29 by running the correction engine (`server.py`) and the
+georeferencing-RMSE script (`scripts/evidence_gcp_rmse.py`)._
 
-The distortion-and-correction math is real and deterministic. The distortion itself is a synthetic parametric model (the "Mercator repair" profile), so this demonstrates the method on controllable distortion, not on real misregistered maps.
+## Reproduced georeferencing RMSE on the real Web Mercator distortion (headline)
 
-## Reproduced demo (headline number)
+This is the honest, real-distortion result: a thin-plate spline (TPS) fit to
+real ground control points against the **genuine Web Mercator projection** (no
+simulated distortion, no added noise). A 12x12 real geographic grid over Europe
+(48-62N, -10-30E) is the GCP set; the points are split 96 train / 48 held-out;
+held-out **ground RMSE** (haversine) is reported for three registrations:
+
+| Registration | Held-out ground RMSE |
+|---|---|
+| raw (read Mercator as equirectangular, no fit) | ~1,338 km |
+| affine (1st-order, 6-parameter) | ~24.0 km |
+| **thin-plate spline (TPS)** | **~2.5 km** |
+
+TPS reduces held-out RMSE by **99.8% vs raw** and **89.4% vs the affine
+baseline**: the affine fit cannot model the nonlinear latitude stretch of Web
+Mercator, and the TPS removes it. Pure numpy, deterministic, no network/GPU.
+Reproduce with:
+
+```bash
+python scripts/evidence_gcp_rmse.py
+```
+
+## Illustrative demo (synthetic profile, fallback)
+
+The distortion-and-correction math is real and deterministic; the interactive
+demo uses a synthetic parametric "Mercator repair" profile, so it demonstrates
+the method on controllable distortion rather than on real misregistered maps.
 
 On 8 sample coordinates under the Mercator-repair profile, the fixed-point inverse-warp recovers **~72% of the distortion area** (recovered = 0.72) with a **mean residual of ~2.8 px** (confidence 0.80). Reproduce with:
 
